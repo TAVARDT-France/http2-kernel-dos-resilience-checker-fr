@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 TAVARDT HTTP/2 & Linux Kernel DoS Resilience Checker
-Auditeur de Résilience contre NoisyTCP, Rapid Reset et Crash de Serveurs Web
-TAVARDT France
+Auditor de Resiliencia contra NoisyTCP, Rapid Reset e Queda de Servidores Web
+TAVARDT Brasil - Ciberseguranca e Infraestrutura de Alta Confiabilidade
 """
 
 import sys
@@ -15,17 +15,18 @@ from typing import Dict, Any, List
 
 VERSION = "1.0.0"
 
+# Parametros recomendados para mitigacao de NoisyTCP e DoS TCP no Linux
 RECOMMENDED_SYSCTL = {
-    "net.ipv4.tcp_syncookies": {"expected": "1", "weight": 20, "desc": "Protection contre SYN Flood et saturation des connexions"},
-    "net.ipv4.tcp_timestamps": {"expected": "0", "weight": 20, "desc": "Atténuation de l'empoisonnement et réordonnancement NoisyTCP"},
-    "net.ipv4.tcp_sack": {"expected": "1", "weight": 15, "desc": "Accusé de réception sélectif TCP (SACK)"},
-    "net.ipv4.tcp_fin_timeout": {"expected": "15", "weight": 15, "desc": "Libération rapide des sockets en état FIN-WAIT"},
-    "net.ipv4.tcp_max_syn_backlog": {"expected": "8192", "weight": 15, "desc": "File d'attente étendue pour requêtes de handshake en attente"},
-    "net.core.somaxconn": {"expected": "4096", "weight": 15, "desc": "Limite de backlog des connexions sockets du système"}
+    "net.ipv4.tcp_syncookies": {"expected": "1", "weight": 20, "desc": "Protecao contra SYN Flood e saturacao de conexoes"},
+    "net.ipv4.tcp_timestamps": {"expected": "0", "weight": 20, "desc": "Mitigacao de envenenamento e reordenacao NoisyTCP"},
+    "net.ipv4.tcp_sack": {"expected": "1", "weight": 15, "desc": "Reconhecimento seletivo de pacotes TCP"},
+    "net.ipv4.tcp_fin_timeout": {"expected": "15", "weight": 15, "desc": "Liberacao rapida de sockets em estado FIN-WAIT"},
+    "net.ipv4.tcp_max_syn_backlog": {"expected": "8192", "weight": 15, "desc": "Fila estendida para requisicoes pendentes de handshake"},
+    "net.core.somaxconn": {"expected": "4096", "weight": 15, "desc": "Limite de backlog de conexoes de sockets do sistema"}
 }
 
 def audit_local_kernel() -> Dict[str, Any]:
-    """Audite les paramètres réseau du noyau Linux local contre la vulnérabilité NoisyTCP."""
+    """Audita os parametros de rede do kernel Linux local contra a falha NoisyTCP."""
     results = {
         "platform": sys.platform,
         "is_linux": sys.platform.startswith("linux"),
@@ -35,7 +36,7 @@ def audit_local_kernel() -> Dict[str, Any]:
     }
 
     if not results["is_linux"]:
-        results["warning"] = "Audit du noyau applicable nativement sur les hôtes Linux. Sur les autres systèmes d'exploitation, utilisez l'audit distant via le réseau."
+        results["warning"] = "Auditoria de kernel aplicavel nativamente em hosts Linux. Em outros sistemas operacionais, utilize a auditoria remota via rede."
         return results
 
     total_weight = sum(v["weight"] for v in RECOMMENDED_SYSCTL.values())
@@ -57,16 +58,16 @@ def audit_local_kernel() -> Dict[str, Any]:
         else:
             results["critical_alerts"].append({
                 "param": param,
-                "current": current_val or "non_configure",
+                "current": current_val or "nao_configurado",
                 "recommended": meta["expected"],
                 "desc": meta["desc"]
             })
 
         results["checks"].append({
             "param": param,
-            "current": current_val or "indisponible",
+            "current": current_val or "indisponivel",
             "recommended": meta["expected"],
-            "status": "CONFORME" if conforming else "VULNÉRABLE",
+            "status": "CONFORME" if conforming else "VULNERAVEL",
             "desc": meta["desc"]
         })
 
@@ -74,7 +75,7 @@ def audit_local_kernel() -> Dict[str, Any]:
     return results
 
 def audit_remote_host(host: str, port: int = 443, timeout: int = 5) -> Dict[str, Any]:
-    """Audite un endpoint distant en évaluant la négociation HTTP/2, TLS et la fuite de version."""
+    """Audita um endpoint remoto avaliando negociacao HTTP/2, TLS e vazamento de versao."""
     report = {
         "target": f"{host}:{port}",
         "http2_supported": False,
@@ -90,6 +91,7 @@ def audit_remote_host(host: str, port: int = 443, timeout: int = 5) -> Dict[str,
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
 
+    # Tenta negociar ALPN com suporte explicito a h2
     try:
         ctx.set_alpn_protocols(["h2", "http/1.1"])
     except Exception:
@@ -105,9 +107,10 @@ def audit_remote_host(host: str, port: int = 443, timeout: int = 5) -> Dict[str,
     except Exception as e:
         report["connection_error"] = str(e)
         report["score"] = 30
-        report["findings"].append(f"Échec de connexion TLS avec {host}:{port}: {e}")
+        report["findings"].append(f"Falha na conexao TLS com {host}:{port}: {e}")
         return report
 
+    # Checagem de cabeçalhos HTTP
     req = f"HEAD / HTTP/1.1\r\nHost: {host}\r\nUser-Agent: TAVARDT-Security-Auditor/1.0\r\nConnection: close\r\n\r\n"
     try:
         with socket.create_connection((host, port), timeout=timeout) as sock:
@@ -124,33 +127,34 @@ def audit_remote_host(host: str, port: int = 443, timeout: int = 5) -> Dict[str,
     except Exception:
         pass
 
+    # Calculo de score remoto
     deductions = 0
     if not report["http2_supported"]:
         deductions += 40
-        report["findings"].append("ALPN h2 non négocié : serveur sans multiplexage moderne ou avec h2c en texte clair.")
+        report["findings"].append("ALPN h2 nao negociado: servidor sem multiplexacao moderna ou com h2c em texto claro.")
     if report["banner_leaked"]:
         deductions += 30
-        report["findings"].append(f"Fuite active de version logicielle dans la bannière : '{report.get('server_banner')}'")
+        report["findings"].append(f"Vazamento de versao de software ativo no banner: '{report.get('server_banner')}'")
 
     report["score"] = max(10, 100 - deductions)
     return report
 
 def main():
     parser = argparse.ArgumentParser(
-        description="TAVARDT France Auditeur de Résilience HTTP/2 & NoisyTCP Linux Kernel"
+        description="TAVARDT Auditor de Resiliencia HTTP/2 & NoisyTCP Linux Kernel"
     )
-    parser.add_argument("--host", help="Hôte distant pour audit de négociation HTTP/2 et bannières", default=None)
-    parser.add_argument("--port", help="Port distant (par défaut : 443)", type=int, default=443)
-    parser.add_argument("--kernel", action="store_true", help="Exécuter l'audit local des paramètres réseau Linux")
-    parser.add_argument("--json", action="store_true", help="Afficher les résultats exclusivement au format JSON")
+    parser.add_argument("-host", help="Host remoto para auditoria de negociacao HTTP/2 e banners", default=None)
+    parser.add_argument("-port", help="Porta remota (padrao: 443)", type=int, default=443)
+    parser.add_argument("-kernel", action="store_true", help="Executar auditoria local dos parametros de rede do Linux")
+    parser.add_argument("-json", action="store_true", help="Retornar saida exclusivamente em formato JSON")
 
     args = parser.parse_args()
 
     results = {
         "version": VERSION,
-        "auditor": "TAVARDT France",
-        "documentation": "https://ag.tavardt.com/fr/cybersecurite/",
-        "web_tool": "https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/"
+        "auditor": "TAVARDT Brasil",
+        "documentation": "https://ag.tavardt.com/br/ciberseguranca/",
+        "web_tool": "https://tavardt-brasil.github.io/http2-kernel-dos-resilience-checker-br/"
     }
 
     if args.kernel or (not args.host and not args.kernel):
@@ -164,36 +168,36 @@ def main():
         return
 
     print("================================================================================")
-    print("      TAVARDT FRANCE : AUDITEUR DE RÉSILIENCE HTTP/2 ET CRASH DU NOYAU LINUX           ")
+    print("      TAVARDT - AUDITOR DE RESILIENCIA HTTP/2 & QUEDA DE KERNEL LINUX           ")
     print("================================================================================")
-    print(f"Version: {VERSION} | Juridiction: France | Portail: https://ag.tavardt.com/fr/cybersecurite/")
-    print("--------------------------------------------------------------------------------\n")
+    print(f"Versao: {VERSION} | Jurisdicao: Brasil | Portal: https://ag.tavardt.com/br/")
+    print("================================================================================\n")
 
     if "kernel_audit" in results:
         ka = results["kernel_audit"]
-        print(f"[*] AUDIT DU NOYAU LINUX (Atténuation NoisyTCP) | Score: {ka['score']}/100")
+        print(f"[*] AUDITORIA DE KERNEL LINUX (NoisyTCP Mitigation) | Score: {ka['score']}/100")
         if not ka["is_linux"]:
-            print(f"    [AVERTISSEMENT] {ka.get('warning')}")
+            print(f"    [AVISO] {ka.get('warning')}")
         else:
             for c in ka["checks"]:
-                tag = "[OK]        " if c["status"] == "CONFORME" else "[VULNÉRABLE]"
-                print(f"    {tag} {c['param']}: actuel={c['current']} | recommandé={c['recommended']}")
+                tag = "[OK]        " if c["status"] == "CONFORME" else "[VULNERAVEL]"
+                print(f"    {tag} {c['param']}: atual={c['current']} | recomendado={c['recommended']}")
         print()
 
     if "remote_audit" in results:
         ra = results["remote_audit"]
-        print(f"[*] AUDIT DISTANT DE PROTOCOLE: {ra['target']} | Score: {ra['score']}/100")
-        print(f"    HTTP/2 Supporté (ALPN): 'OUI' if ra['http2_supported'] else 'NON'")
-        print(f"    Version TLS: {ra['tls_version'] or 'Inconnue'}")
-        print(f"    Bannière Serveur Exposée: 'OUI (' + str(ra['server_banner']) + ')' if ra['banner_leaked'] else 'NON (Protégé)'")
+        print(f"[*] AUDITORIA REMOTA DE PROTOCOLO: {ra['target']} | Score: {ra['score']}/100")
+        print(f"    HTTP/2 Suportado (ALPN): {'SIM' if ra['http2_supported'] else 'NAO'}")
+        print(f"    Versao TLS: {ra['tls_version'] or 'Desconhecida'}")
+        print(f"    Banner Server Exposto: {'SIM (' + ra['server_banner'] + ')' if ra['banner_leaked'] else 'NAO (Protegido)'}")
         if ra["findings"]:
-            print("    Alertes de Risque Identifiées :")
+            print("    Apontamentos de Risco:")
             for f in ra["findings"]:
-                print(f"      * {f}")
+                print(f"      - {f}")
         print()
 
-    print("Pour support technique et durcissement périmétrique :")
-    print(f"TAVARDT France: https://ag.tavardt.com/fr/cybersecurite/")
+    print("Para suporte tecnico e blindagem perimetral:")
+    print("TAVARDT Brasil: https://ag.tavardt.com/br/ciberseguranca/")
 
 if __name__ == "__main__":
     main()
