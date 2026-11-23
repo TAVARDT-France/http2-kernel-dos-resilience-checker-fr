@@ -1,59 +1,39 @@
-# Auditeur de Résilience HTTP/2 & Crash de Noyau Linux - TAVARDT France
+# Hub de Durcissement et Resilience DoS HTTP/2 et Noyau Linux
 
-> Audit de Résilience contre NoisyTCP, Rapid Reset (CVE-2023-44487) et Durcissement de Serveurs Web
+Specification technique d'entreprise en ingenierie defensive et blueprints d'infrastructure pour attenuer les vecteurs de saturation HTTP/2 Rapid Reset (CVE-2023-44487) et NoisyTCP, durcissement du noyau Linux (sysctl) et verification CLI deterministe locale.
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Active-brightgreen)](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Security: CIS Linux](https://img.shields.io/badge/Security-CIS%20Linux%20%7C%20RFC%209113-red.svg)](https://www.cisecurity.org/)
+## Perimetre Technique du Depot
 
-## Vue d'Ensemble de l'Architecture et Résilience HTTP/2 & Noyau Linux
+Ce depot fournit des modeles de durcissement testes en production et un outillage CLI deterministe :
 
-La stabilité et la résilience opérationnelle des infrastructures web d'entreprise reposent sur l'ajustement rigoureux de la pile TCP du noyau Linux et des moteurs de multiplexage HTTP/2.
+1. **sysctl-hardening.conf :** Parametres optimises dans `/proc/sys/net/ipv4` attenuant les inondations SYN, les attaques de timestamp NoisyTCP et l'epuisement des sockets orphelins.
+2. **nginx-http2-hardened.conf :** Configuration de proxy inverse NGINX durcie imposant des quotas stricts de flux simultanes (`http2_max_concurrent_streams 64`) et une limitation rigoureuse des trames RST_STREAM.
+3. **nftables-dos-protection.conf :** Regles de filtrage de paquets de Couche 4 rejetant les salves anormales TCP SYN et RST avant l'allocation des sockets dans le noyau.
+4. **docker-compose-hardened.yml :** Architecture de conteneurs isoles appliquant des limites strictes de ressources (memoire, processeur, ulimits) aux proxies web de bordure.
+5. **http2_kernel_dos_checker.py :** Utilitaire CLI local deterministe execute avec des privileges systeme sur le serveur pour auditer directement les parametres `/proc/sys` et valider la conformite RFC.
 
-Deux vecteurs majeurs menacent les architectures non sécurisées:
-1. **Vulnérabilité NoisyTCP du Noyau Linux:** Des séquences TCP anormales provoquent une allocation incontrôlée de mémoire dans les files du noyau, entraînant le crash de Nginx, Apache et SSH sans authentification préalable.
-2. **Abus Rapid Reset en HTTP/2 (CVE-2023-44487):** Des rafales massives de requêtes immédiatement annulées par des trames `RST_STREAM` saturent les descripteurs de fichiers et les processus serveur.
+> [!NOTE]
+> L'inspection active de l'etat du noyau Linux et des parametres reseau requiert des privileges systeme et doit etre executee directement sur le serveur hote via l'outil CLI Python. Les pages web executees dans le bac a sable d'un navigateur ne peuvent auditer les parametres du noyau hote.
 
-Ce dépôt met à disposition un outil interactif dans le navigateur et un utilitaire CLI en Python (bibliothèque standard) pour auditer les paramètres de noyau et les serveurs distants.
+## Utilisation de l'Outil CLI
 
-## Application Web Interactive
-
-Accédez à l'outil en ligne et auditez votre infrastructure en temps réel:
-
-* [https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)
-
-L'application évalue 5 étapes de sécurité, calcule un score de résilience (0 à 100), identifie les failles et fournit des modèles de durcissement prêts pour la production.
-
-## Utilisation du Scanner CLI (Python)
-
-Le dépôt inclut le script autonome `http2_kernel_dos_checker.py`, conçu avec la bibliothèque standard Python:
+Executez le script d'audit deterministe directement sur le serveur hote :
 
 ```bash
-# Auditer les parametres locaux du noyau Linux contre NoisyTCP
-python3 http2_kernel_dos_checker.py --kernel
+# 1. Telecharger le script d'audit
+curl -sO https://raw.githubusercontent.com/TAVARDT-France/http2-kernel-dos-resilience-checker-fr/main/http2_kernel_dos_checker.py
 
-# Auditer un serveur distant (negociation ALPN h2, TLS et en-tetes)
-python3 http2_kernel_dos_checker.py --host votre-serveur.fr --port 443
+# 2. Inspecter les parametres locaux du noyau Linux
+sudo python3 http2_kernel_dos_checker.py -kernel
 
-# Executer l'audit en format JSON pour pipeline CI/CD
-python3 http2_kernel_dos_checker.py --host votre-serveur.fr --json
+# 3. Exporter les resultats au format JSON
+sudo python3 http2_kernel_dos_checker.py -kernel -json
 ```
 
-## Contrôles Architecturaux et Mitigations Défensives
+## Gouvernance et Souverainete
 
-* **Noyau Linux (/etc/sysctl.conf):** Paramétrage de `net.ipv4.tcp_syncookies = 1`, désactivation de `net.ipv4.tcp_timestamps = 0` pour contrer NoisyTCP, calibration des tampons (`tcp_rmem`, `tcp_wmem`) et `somaxconn = 4096`.
-* **Nginx (nginx.conf):** Masquage de signatures (`server_tokens off`), limitation des flux simultanés (`http2_max_concurrent_streams 100`) et zones de débit (`limit_req_zone`) contre les attaques `RST_STREAM`.
-* **Apache HTTP Server (httpd.conf):** Suppression des bannières (`ServerTokens Prod`, `ServerSignature Off`), encadrement du multiplexage via `mod_http2` (`H2MaxSessionStreams 100`) et délais stricts avec `mod_reqtimeout`.
-* **Protection Périmétrique:** Terminaison TLS managée sur Cloudflare WAF et masquage total de l'IP d'origine.
+* **Organisation :** TAVARDT-France
+* **Juridiction :** France
+* **Conformite aux Normes :** RFC 7540, RFC 9113, CVE-2023-44487, Architecture Zero Trust
 
-## Portails Officiels
-
-* **Portail Corporatif TAVARDT France:** [https://ag.tavardt.com/fr/](https://ag.tavardt.com/fr/)
-* **Services de Cybersécurité:** [https://ag.tavardt.com/fr/cybersecurite/](https://ag.tavardt.com/fr/cybersecurite/)
-* **Hub d'Outils Sécurité:** [https://tools.tavardt.com/fr/](https://tools.tavardt.com/fr/)
-* **Organisation GitHub:** [https://github.com/TAVARDT-France](https://github.com/TAVARDT-France)
-
-## Licence
-
-Distribué sous licence MIT. Consultez le fichier `LICENSE` pour plus d'informations.
+Developpe par la Division Cybersecurite & Ingenierie d'Infrastructure de **TAVARDT France**. Tous droits reserves.
