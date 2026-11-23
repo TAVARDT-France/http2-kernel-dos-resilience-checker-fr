@@ -1,39 +1,68 @@
-# Hub de Durcissement et Resilience DoS HTTP/2 et Noyau Linux
+# Hub de Durcissement et Résilience DoS HTTP/2 et Noyau Linux
 
-Specification technique d'entreprise en ingenierie defensive et blueprints d'infrastructure pour attenuer les vecteurs de saturation HTTP/2 Rapid Reset (CVE-2023-44487) et NoisyTCP, durcissement du noyau Linux (sysctl) et verification CLI deterministe locale.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-5b3cf5.svg)](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)
+[![Juridiction](https://img.shields.io/badge/Juridiction-France-00C853.svg)](https://ag.tavardt.com/fr/)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![RFC 7540](https://img.shields.io/badge/RFC-7540-blue.svg)](https://datatracker.ietf.org/doc/html/rfc7540)
+[![RFC 9113](https://img.shields.io/badge/RFC-9113-blue.svg)](https://datatracker.ietf.org/doc/html/rfc9113)
 
-## Perimetre Technique du Depot
+**Hub d'Architecture Défensive et d'Atténuation contre le DoS HTTP/2 (Rapid Reset CVE-2023-44487) et Noyau Linux**
 
-Ce depot fournit des modeles de durcissement testes en production et un outillage CLI deterministe :
+Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **[TAVARDT France](https://ag.tavardt.com/fr/)**.
 
-1. **sysctl-hardening.conf :** Parametres optimises dans `/proc/sys/net/ipv4` attenuant les inondations SYN, les attaques de timestamp NoisyTCP et l'epuisement des sockets orphelins.
-2. **nginx-http2-hardened.conf :** Configuration de proxy inverse NGINX durcie imposant des quotas stricts de flux simultanes (`http2_max_concurrent_streams 64`) et une limitation rigoureuse des trames RST_STREAM.
-3. **nftables-dos-protection.conf :** Regles de filtrage de paquets de Couche 4 rejetant les salves anormales TCP SYN et RST avant l'allocation des sockets dans le noyau.
-4. **docker-compose-hardened.yml :** Architecture de conteneurs isoles appliquant des limites strictes de ressources (memoire, processeur, ulimits) aux proxies web de bordure.
-5. **http2_kernel_dos_checker.py :** Utilitaire CLI local deterministe execute avec des privileges systeme sur le serveur pour auditer directement les parametres `/proc/sys` et valider la conformite RFC.
+***
+
+## Portails Officiels
+
+* **Portail Institutionnel**: [https://ag.tavardt.com/fr/](https://ag.tavardt.com/fr/)
+* **Centre d'Outils**: [https://tools.tavardt.com/fr/](https://tools.tavardt.com/fr/)
+* **Contact et Support Technique**: [https://ag.tavardt.com/fr/contact/](https://ag.tavardt.com/fr/contact/)
+
+***
+
+## Démonstration en Ligne & Hub d'Architecture Défensive
+
+Vous pouvez consulter les spécifications techniques, les diagnostics architecturaux et les blueprints de durcissement directement dans votre navigateur :
+
+* **[Application Web Officielle sur GitHub Pages](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)**
+* **[Centre d'Outils TAVARDT](https://tools.tavardt.com/fr/)**
 
 > [!NOTE]
-> L'inspection active de l'etat du noyau Linux et des parametres reseau requiert des privileges systeme et doit etre executee directement sur le serveur hote via l'outil CLI Python. Les pages web executees dans le bac a sable d'un navigateur ne peuvent auditer les parametres du noyau hote.
+> **Périmètre d'Exécution Technique :** Ce hub web fournit des spécifications d'architecture défensive et des blueprints de configuration. L'inspection active de l'etat du noyau Linux et les audits de la pile réseau requièrent des privilèges système (root) et doivent etre exécutés directement sur l'hote via l'utilitaire CLI officiel (`http2_kernel_dos_checker.py`). Les pages web exécutées dans le bac a sable d'un navigateur ne peuvent auditer les paramètres internes du noyau.
 
-## Utilisation de l'Outil CLI
+***
 
-Executez le script d'audit deterministe directement sur le serveur hote :
+## Blueprints Techniques de Durcissement
+
+1. **sysctl-hardening.conf :** Paramètres optimisés dans `/proc/sys/net/ipv4` atténuant les inondations SYN, les attaques de timestamp NoisyTCP et l'épuisement des sockets orphelins.
+2. **nginx-http2-hardened.conf :** Configuration de proxy inverse NGINX durcie imposant des quotas stricts de flux simultanes (`http2_max_concurrent_streams 64`) et une limitation rigoureuse des trames RST_STREAM.
+3. **nftables-dos-protection.conf :** Règles de filtrage de paquets de Couche 4 rejetant les salves anormales TCP SYN et RST avant l'allocation des sockets dans le noyau.
+4. **docker-compose-hardened.yml :** Architecture de conteneurs isolés appliquant des limites strictes de ressources (mémoire, processeur, ulimits) aux proxies web de bordure.
+5. **http2_kernel_dos_checker.py :** Utilitaire CLI local déterministe exécuté avec des privilèges système sur le serveur pour auditer directement les paramètres `/proc/sys` et valider la conformité RFC.
+
+***
+
+## Utilisation de l'Outil CLI Déterministe
+
+Pour exécutér l'inspection déterministe directement sur le serveur hote Linux :
 
 ```bash
-# 1. Telecharger le script d'audit
+# 1. Télécharger le script d'audit depuis le dépôt officiel
 curl -sO https://raw.githubusercontent.com/TAVARDT-France/http2-kernel-dos-resilience-checker-fr/main/http2_kernel_dos_checker.py
 
-# 2. Inspecter les parametres locaux du noyau Linux
+# 2. Inspecter les paramètres locaux du noyau Linux
 sudo python3 http2_kernel_dos_checker.py -kernel
 
-# 3. Exporter les resultats au format JSON
+# 3. Exporter les resultats au format JSON structuré
 sudo python3 http2_kernel_dos_checker.py -kernel -json
 ```
 
-## Gouvernance et Souverainete
+***
+
+## Gouvernance et Souveraineté
 
 * **Organisation :** TAVARDT-France
 * **Juridiction :** France
-* **Conformite aux Normes :** RFC 7540, RFC 9113, CVE-2023-44487, Architecture Zero Trust
+* **Conformité aux Normes :** CIS Linux Benchmarks, RFC 7540, RFC 9113, CVE-2023-44487 et Architecture Zero Trust.
 
-Developpe par la Division Cybersecurite & Ingenierie d'Infrastructure de **TAVARDT France**. Tous droits reserves.
+Développé par la Division Cybersécurité & Ingénierie d'Infrastructuré de **[TAVARDT France](https://ag.tavardt.com/fr/)**. Tous droits réservés.
