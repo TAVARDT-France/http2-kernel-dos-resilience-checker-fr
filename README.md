@@ -11,9 +11,6 @@ Développé et maintenu par la division d'ingénierie de sécurité et d'infrast
 
 ***
 
-
-***
-
 ## Démonstration en Ligne & Hub d'Architecture Défensive
 
 Vous pouvez consulter les spécifications techniques, les diagnostics architecturaux et les blueprints de durcissement directement dans votre navigateur :
@@ -50,6 +47,14 @@ sudo python3 http2_kernel_dos_checker.py -kernel
 # 3. Exporter les resultats au format JSON structuré
 sudo python3 http2_kernel_dos_checker.py -kernel -json
 ```
+
+***
+
+## Liens Utiles
+
+* **Portail Entreprise:** https://ag.tavardt.com/fr/
+* **Suite de Diagnostic:** https://tools.tavardt.com/fr/
+* **Contact Technique:** https://ag.tavardt.com/fr/contact/
 
 ***
 
