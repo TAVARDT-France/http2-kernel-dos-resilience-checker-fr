@@ -1,22 +1,21 @@
 # Hub de Durcissement et Résilience DoS HTTP/2 et Noyau Linux
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-5b3cf5.svg)](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)
-[![Juridiction](https://img.shields.io/badge/Juridiction-France-00C853.svg)](https://ag.tavardt.com/fr/)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
 [![RFC 7540](https://img.shields.io/badge/RFC-7540-blue.svg)](https://datatracker.ietf.org/doc/html/rfc7540)
 [![RFC 9113](https://img.shields.io/badge/RFC-9113-blue.svg)](https://datatracker.ietf.org/doc/html/rfc9113)
 
 **Hub d'Architecture Défensive et d'Atténuation contre le DoS HTTP/2 (Rapid Reset CVE-2023-44487) et Noyau Linux**
 
-Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **[TAVARDT France](https://ag.tavardt.com/fr/)**.
+Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **TAVARDT France**.
 
 ***
 
 ## Portails Officiels
 
-* **Portail Institutionnel**: [https://ag.tavardt.com/fr/](https://ag.tavardt.com/fr/)
-* **Centre d'Outils**: [https://tools.tavardt.com/fr/](https://tools.tavardt.com/fr/)
-* **Contact et Support Technique**: [https://ag.tavardt.com/fr/contact/](https://ag.tavardt.com/fr/contact/)
+* **Portail Institutionnel**: [Portal Institucional](https://ag.tavardt.com/fr/)
+* **Centre d'Outils**: [Central de Ferramentas](https://tools.tavardt.com/fr/)
+* **Contact et Support Technique**: [Canal de Contato](https://ag.tavardt.com/fr/contact/)
 
 ***
 
@@ -25,7 +24,7 @@ Développé et maintenu par la division d'ingénierie de sécurité et d'infrast
 Vous pouvez consulter les spécifications techniques, les diagnostics architecturaux et les blueprints de durcissement directement dans votre navigateur :
 
 * **[Application Web Officielle sur GitHub Pages](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)**
-* **[Centre d'Outils TAVARDT](https://tools.tavardt.com/fr/)**
+* **Centre d'Outils TAVARDT**
 
 > [!NOTE]
 > **Périmètre d'Exécution Technique :** Ce hub web fournit des spécifications d'architecture défensive et des blueprints de configuration. L'inspection active de l'etat du noyau Linux et les audits de la pile réseau requièrent des privilèges système (root) et doivent etre exécutés directement sur l'hote via l'utilitaire CLI officiel (`http2_kernel_dos_checker.py`). Les pages web exécutées dans le bac a sable d'un navigateur ne peuvent auditer les paramètres internes du noyau.
@@ -65,4 +64,4 @@ sudo python3 http2_kernel_dos_checker.py -kernel -json
 * **Juridiction :** France
 * **Conformité aux Normes :** CIS Linux Benchmarks, RFC 7540, RFC 9113, CVE-2023-44487 et Architecture Zero Trust.
 
-Développé par la Division Cybersécurité & Ingénierie d'Infrastructuré de **[TAVARDT France](https://ag.tavardt.com/fr/)**. Tous droits réservés.
+Développé par la Division Cybersécurité & Ingénierie d'Infrastructuré de **TAVARDT France**. Tous droits réservés.
