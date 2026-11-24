@@ -10,7 +10,7 @@
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-N6589RSL');</script>
+  })(window,document,'script','dataLayer','GTM-MZTKGRHF');</script>
   
 
   <meta charset="UTF-8">
@@ -1002,7 +1002,7 @@
   </style>
 </head>
 <body>
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N6589RSL"
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZTKGRHF"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <header class="tavardt-header">
@@ -1378,43 +1378,43 @@ if __name__ == "__main__":
 
     const scenariosData = {
       vuln: {
-        badgeClass: 'badge-vuln',
-        badgeText: 'POSTURE PAR DÉFAUT : VULNÉRABLE À L'ÉPUISEMENT DES RESSOURCES & DOS HTTP/2',
-        modeTag: 'Paramètres par Défaut Sans Quotas de Flux et TCP Non Protégé',
-        summary: 'Servidores com configurações padrão de kernel e web servers expostos aceitam centenas de streams simultâneos sem rate limiting de RST_STREAM, filas de backlog curtas e sem proteções SYN cookies, sucumbindo rapidamente a ataques de Rapid Reset e NoisyTCP.',
-        findingsCount: '4 Vulnérabilités Actives',
-        findingsCountColor: '#ef4444',
+        badgeClass: "badge-vuln",
+        badgeText: "POSTURE PAR DÉFAUT : VULNÉRABLE À L'ÉPUISEMENT DES RESSOURCES & DOS HTTP/2",
+        modeTag: "Paramètres par Défaut Sans Quotas de Flux et TCP Non Protégé",
+        summary: "Les serveurs avec des configurations standard de noyau et des serveurs web exposés acceptent des centaines de flux simultanés sans limitation de débit de RST_STREAM, disposent de files d'attente backlog courtes et manquent de protection SYN cookies, succombant rapidement aux attaques Rapid Reset et NoisyTCP.",
+        findingsCount: "4 Vulnérabilités Actives",
+        findingsCountColor: "#ef4444",
         routes: [
-          { path: 'http2_max_concurrent_streams ilimitado / alto (128+)', status: 'Sans Quota', exposure: 'Exaustão imediata de buffers e threads de worker', risk: 'CRÍTICO', tagClass: 'crit' },
-          { path: 'RST_STREAM sem limitação de taxa (CVE-2023-44487)', status: 'Rapid Reset', exposure: 'Descarte contínuo consome CPU sem disparar timeout', risk: 'CRÍTICO', tagClass: 'crit' },
-          { path: 'net.ipv4.tcp_syncookies desativado ou backlog padrão', status: 'SYN Flood', exposure: 'Esgotamento da tabela de conexões em rajadas TCP', risk: 'ALTO', tagClass: 'high' },
-          { path: 'Ausência de filtragem L4 (nftables / firewall)', status: 'Sans Défense L4', exposure: 'Tráfego malicioso atinge espaço de usuário sem filtro', risk: 'ALTO', tagClass: 'high' }
+          { path: "TCP SYN Flood (Port 443)", status: "Exposé", exposure: "Backlog 128 saturé sans SYN Cookies", risk: "CRITIQUE", tagClass: "danger" },
+          { path: "HTTP/2 Rapid Reset (RST_STREAM)", status: "Vulnérable", exposure: "Aucune limite de réinitialisation de flux", risk: "CRITIQUE", tagClass: "danger" },
+          { path: "Slowloris / Slow Read HTTP/2", status: "Non Atténué", exposure: "Timeouts par défaut élevés (60s)", risk: "ÉLEVÉ", tagClass: "danger" },
+          { path: "Allocation Mémoire Buffers TCP", status: "Risque OOM", exposure: "rmem/wmem sans plafonnement strict", risk: "MOYEN", tagClass: "danger" }
         ],
         findings: [
-          { text: 'Directives HTTP/2 standard sur le serveur web sans contrôle strict de concurrence par connexion (flux illimités).', type: 'warn' },
-          { text: 'Vulnérabilité au Rapid Reset (CVE-2023-44487) en raison de l'absence de limitation de débit pour les trames RST_STREAM.', type: 'warn' },
-          { text: 'Noyau Linux sans ajustement /proc/sys/net/ipv4 (syncookies désactivés et backlog restreint) pour absorber les salves TCP.', type: 'warn' },
-          { text: 'Absence de règles de pare-feu L4 (nftables) pour rejeter les salves anormales de paquets RST et SYN.', type: 'warn' }
+          { text: "Vulnérabilité au Rapid Reset (CVE-2023-44487) en raison de l'absence de limitation de débit pour les trames RST_STREAM.", type: "crit" },
+          { text: "File d'attente tcp_max_syn_backlog trop faible (128) causant le rejet immédiat des connexions légitimes sous attaque.", type: "crit" },
+          { text: "Paramètre tcp_syncookies désactivé ou non déclenché, exposant les tables d'état de connexion du noyau.", type: "crit" },
+          { text: "Absence de limitation de requêtes concurrentes au niveau de la couche mandataire inverse (Reverse Proxy).", type: "crit" }
         ]
       },
       hard: {
-        badgeClass: 'badge-hard',
-        badgeText: 'POSTURE BLINDÉE : TAVARDT ZERO TRUST & DÉFENSE EN PROFONDEUR',
-        modeTag: 'Durcissement du Noyau Linux, Quotas Stricts HTTP/2 et Filtrage L4',
-        summary: 'A infraestrutura blindada impõe quotas rigorosas de streams concorrentes, taxa de cancelamento RST_STREAM controlada no proxy reverso, parâmetros de kernel sysctl otimizados para descarte rápido e filtragem em nível de pacote com nftables.',
-        findingsCount: '4 Contrôles Implémentés (Totalement Blindé)',
-        findingsCountColor: '#10b981',
+        badgeClass: "badge-hardened",
+        badgeText: "ARCHITECTURE DURCIE : RÉSILIENCE KERNEL & GOUVERNANCE HTTP/2",
+        modeTag: "Standard TAVARDT de Durcissement de Noyau Linux",
+        summary: "La configuration durcie impose des SYN cookies obligatoires, élève le backlog à 4096+, restreint drastiquement les flux concurrents HTTP/2 par connexion et élimine les allocations mémoire orphelines via sysctl optimisé et règles Cloudflare WAF.",
+        findingsCount: "Résilience Maximale Validée (0 Alerte)",
+        findingsCountColor: "#10b981",
         routes: [
-          { path: 'http2_max_concurrent_streams 64 com limit_req', status: 'Isolado', exposure: 'Consumo previsível de memória por conexão TCP ativa', risk: 'BLINDADO', tagClass: 'safe' },
-          { path: 'Mitigação de Rapid Reset com descarte de abusos', status: 'Rate Limited', exposure: 'Conexões com excesso de resets são encerradas de imediato', risk: 'BLINDADO', tagClass: 'safe' },
-          { path: 'net.ipv4.tcp_syncookies = 1 e backlog ajustado', status: 'Otimizado', exposure: 'Resiliência contra ataques volumétricos na camada TCP', risk: 'CONFORME', tagClass: 'safe' },
-          { path: 'nftables com limite de conexões por IP de origem', status: 'Filtragem L4', exposure: 'Pacotes abusivos descartados antes de atingir o proxy', risk: 'BLINDADO', tagClass: 'safe' }
+          { path: "TCP SYN Flood (Port 443)", status: "Protégé", exposure: "SYN Cookies Actifs (Backlog 4096)", risk: "NEUTRALISÉ", tagClass: "safe" },
+          { path: "HTTP/2 Rapid Reset (RST_STREAM)", status: "Immunisé", exposure: "Plafond RST_STREAM (100 req/min)", risk: "SÉCURISÉ", tagClass: "safe" },
+          { path: "Slowloris / Slow Read HTTP/2", status: "Atténué", exposure: "Timeouts agressifs (5s handshake)", risk: "SÉCURISÉ", tagClass: "safe" },
+          { path: "Allocation Mémoire Buffers TCP", status: "Contrôlé", exposure: "Quotas stricts de mémoire tampon", risk: "OPTIMISÉ", tagClass: "safe" }
         ],
         findings: [
-          { text: 'Proxy inverse configuré avec des quotas stricts de flux multiplexés (limite de 64 connexions simultanées).', type: 'ok' },
-          { text: 'Atténuation active contre le Rapid Reset avec fermeture immédiate des sessions abusant des trames RST_STREAM.', type: 'ok' },
-          { text: 'Paramètres sysctl du noyau blindés avec net.ipv4.tcp_syncookies = 1 et files de backlog élargies.', type: 'ok' },
-          { text: 'Règles de pare-feu nftables protégeant l'hôte contre les attaques volumétriques L4 sur le port HTTPS 443.', type: 'ok' }
+          { text: "Protection SYN cookies activée en continu avec file de backlog étendue à 4096 connexions semi-ouvertes.", type: "ok" },
+          { text: "Limitation stricte des trames RST_STREAM et des flux simultanés configurée dans Nginx et HAProxy.", type: "ok" },
+          { text: "Timeouts agressifs de lecture d'en-tête et de corps réduits pour neutraliser les attaques lentes.", type: "ok" },
+          { text: "Règles Cloudflare WAF HTTP/2 actives rejetant les motifs d'attaque en bordure avant le serveur d'origine.", type: "ok" }
         ]
       }
     };
