@@ -7,15 +7,10 @@
 
 **Hub d'Architecture Défensive et d'Atténuation contre le DoS HTTP/2 (Rapid Reset CVE-2023-44487) et Noyau Linux**
 
-Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **TAVARDT France**.
+Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **TAVARDT**.
 
 ***
 
-## Portails Officiels
-
-* **Portail Institutionnel**: [Portal Institucional](https://ag.tavardt.com/fr/)
-* **Centre d'Outils**: [Central de Ferramentas](https://tools.tavardt.com/fr/)
-* **Contact et Support Technique**: [Canal de Contato](https://ag.tavardt.com/fr/contact/)
 
 ***
 
