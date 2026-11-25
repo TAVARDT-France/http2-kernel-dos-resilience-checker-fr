@@ -4,19 +4,17 @@
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
 [![RFC 7540](https://img.shields.io/badge/RFC-7540-blue.svg)](https://datatracker.ietf.org/doc/html/rfc7540)
 [![RFC 9113](https://img.shields.io/badge/RFC-9113-blue.svg)](https://datatracker.ietf.org/doc/html/rfc9113)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **Hub d'Architecture Défensive et d'Atténuation contre le DoS HTTP/2 (Rapid Reset CVE-2023-44487) et Noyau Linux**
 
-Développé et maintenu par la division d'ingénierie de sécurité et d'infrastructuré de **TAVARDT**.
-
 ***
 
-## Démonstration en Ligne & Hub d'Architecture Défensive
+## Démonstration en Ligne
 
 Vous pouvez consulter les spécifications techniques, les diagnostics architecturaux et les blueprints de durcissement directement dans votre navigateur :
 
 * **[Application Web Officielle sur GitHub Pages](https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/)**
-* **Centre d'Outils TAVARDT**
 
 > [!NOTE]
 > **Périmètre d'Exécution Technique :** Ce hub web fournit des spécifications d'architecture défensive et des blueprints de configuration. L'inspection active de l'etat du noyau Linux et les audits de la pile réseau requièrent des privilèges système (root) et doivent etre exécutés directement sur l'hote via l'utilitaire CLI officiel (`http2_kernel_dos_checker.py`). Les pages web exécutées dans le bac a sable d'un navigateur ne peuvent auditer les paramètres internes du noyau.
