@@ -38,7 +38,7 @@
 <meta content="1200" property="og:image:width"/>
 <meta content="630" property="og:image:height"/>
 <meta content="TAVARDT France" property="og:image:alt"/>
-<meta content="pt_BR" property="og:locale"/>
+<meta content="fr_FR" property="og:locale"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="@tavardt" name="twitter:site"/>
 <meta content="Hub de Hardening HTTP/2 &amp; Noyau Linux | TAVARDT France" name="twitter:title"/>
@@ -55,7 +55,7 @@
         "applicationCategory": "SecurityApplication",
         "operatingSystem": "Linux, All",
         "browserRequirements": "Requires JavaScript. Requires HTML5.",
-        "description": "Central corporativa de especificações de arquitetura defensiva, blueprints de mitigação de Rapid Reset (CVE-2023-44487), hardening de kernel Linux (sysctl) e script CLI determinístico de auditoria.",
+        "description": "Centre d'entreprise de spécifications d'architecture défensive, blueprints d'atténuation de Rapid Reset (CVE-2023-44487), durcissement du noyau Linux (sysctl) et script CLI déterministe d'audit.",
         "offers": {
           "@type": "Offer",
           "price": "0",
@@ -94,7 +94,7 @@
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "Central de Ferramentas",
+            "name": "Centre d'Outils",
             "item": "https://tools.tavardt.com/fr/"
           },
           {
@@ -108,8 +108,8 @@
       {
         "@type": "TechArticle",
         "@id": "https://tavardt-france.github.io/http2-kernel-dos-resilience-checker-fr/#article",
-        "headline": "Especificação Técnica de Mitigação de DoS em HTTP/2 e Hardening de Kernel Linux",
-        "description": "Análise arquitetural de vetores de exaustão em HTTP/2 (Rapid Reset e NoisyTCP) e parâmetros de mitigação para servidores corporativos.",
+        "headline": "Spécification Technique d'Atténuation des DoS HTTP/2 et Durcissement du Noyau Linux",
+        "description": "Analyse architecturale des vecteurs d'épuisement en HTTP/2 (Rapid Reset et NoisyTCP) et paramètres d'atténuation pour serveurs d'entreprise.",
         "articleSection": "Hardening HTTP/2 & Kernel",
         "inLanguage": "fr-FR",
         "publisher": {
@@ -124,42 +124,42 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Por que auditorias ativas de sobrecarga HTTP/2 e queda de kernel não devem ser executadas pelo navegador?",
+            "name": "Pourquoi les audits actifs de surcharge HTTP/2 et de crash du noyau ne doivent-ils pas être exécutés via le navigateur ?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Auditorias de exaustão de pilha TCP e kernel exigem sockets brutos (raw sockets) e inspeção do sistema de arquivos /proc/sys do host, capacidades indisponíveis na sandbox restrita do navegador web. Por isso, a TAVARDT disponibiliza blueprints validados de configuração e um script CLI determinístico em Python para execução local no servidor."
+              "text": "Les audits d'épuisement de pile TCP et de noyau nécessitent des sockets bruts (raw sockets) et l'inspection du système de fichiers /proc/sys de l'hôte, capacités indisponibles dans le bac à sable restreint du navigateur web. C'est pourquoi TAVARDT met à disposition des blueprints de configuration validés et un script CLI déterministe en Python pour une exécution locale sur le serveur."
             }
           },
           {
             "@type": "Question",
-            "name": "Como o ataque HTTP/2 Rapid Reset (CVE-2023-44487) atua sobre servidores web?",
+            "name": "Comment l'attaque HTTP/2 Rapid Reset (CVE-2023-44487) agit-elle sur les serveurs web ?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "O ataque explora o mecanismo de multiplexação do protocolo HTTP/2 enviando sucessivas requisições HEADERS imediatamente seguidas de quadros RST_STREAM. O servidor web aloca recursos para processar cada requisição antes de descartá-la, gerando sobrecarga massiva de CPU e memória sem que o limite de conexões concorrentes seja atingido."
+              "text": "L'attaque exploite le mécanisme de multiplexage du protocole HTTP/2 en envoyant des requêtes HEADERS successives immédiatement suivies de trames RST_STREAM. Le serveur web alloue des ressources pour traiter chaque requête avant de l'abandonner, générant une surcharge massive de CPU et de mémoire sans jamais atteindre la limite de connexions simultanées."
             }
           },
           {
             "@type": "Question",
-            "name": "Quais parâmetros do kernel Linux (sysctl) são fundamentais para mitigação de saturação TCP?",
+            "name": "Quels paramètres du noyau Linux (sysctl) sont fondamentaux pour atténuer la saturation TCP ?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Destacam-se net.ipv4.tcp_syncookies = 1 (proteção contra SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (fila de conexões pendentes), net.ipv4.tcp_fin_timeout = 15 (liberação rápida de sockets órfãos) e net.ipv4.tcp_tw_reuse = 1 (reaproveitamento seguro de sockets em TIME_WAIT)."
+              "text": "On distingue notamment net.ipv4.tcp_syncookies = 1 (protection contre le SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (file d'attente des connexions en attente), net.ipv4.tcp_fin_timeout = 15 (libération rapide des sockets orphelins) et net.ipv4.tcp_tw_reuse = 1 (réutilisation sécurisée des sockets en TIME_WAIT)."
             }
           },
           {
             "@type": "Question",
-            "name": "Qual a diferença entre mitigar ataques DoS na camada de aplicação (L7) versus camada de rede (L4)?",
+            "name": "Quelle est la différence entre atténuer les attaques DoS au niveau applicatif (L7) et au niveau réseau (L4) ?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "A camada L4 (firewall nftables) filtra pacotes SYN abusivos e conexões anômalas antes que cheguem ao espaço do usuário, consumindo mínima CPU. A camada L7 (NGINX/proxy) inspeciona fluxos HTTP/2, limitando requisições e RST_STREAMs. Uma arquitetura defensiva robusta exige a atuação coordenada de ambas as camadas."
+              "text": "La couche L4 (pare-feu nftables) filtre les paquets SYN abusifs et les connexions anormales avant qu'ils n'atteignent l'espace utilisateur, consommant un minimum de CPU. La couche L7 (NGINX/proxy) inspecte les flux HTTP/2, limitant requêtes et RST_STREAM. Une architecture défensive robuste exige l'action coordonnée de ces deux couches."
             }
           },
           {
             "@type": "Question",
-            "name": "Como implementar as diretivas de mitigação sem interromper o tráfego legítimo de usuários?",
+            "name": "Comment implémenter les directives d'atténuation sans interrompre le trafic légitime des utilisateurs ?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Recomenda-se aplicar os parâmetros em ambiente de staging ou através de deploy canário, monitorando métricas de latência e contadores de descarte com nstat e dmesg. As diretivas NGINX devem manter margem suficiente (ex.: 64 a 128 streams concorrentes) para atender clientes legítimos com alta performance."
+              "text": "Il est recommandé d'appliquer les paramètres en environnement de préproduction ou via un déploiement canari, en surveillant les métriques de latence et les compteurs d'abandon avec nstat et dmesg. Les directives NGINX doivent conserver une marge suffisante (ex. 64 à 128 flux simultanés) pour servir les clients légitimes avec des performances optimales."
             }
           }
         ]
@@ -1028,54 +1028,54 @@
 <main class="tavardt-main">
 <section class="hero-section">
 <h1 class="hero-title">Hub d'Architecture Défensive &amp; Hardening contre DoS HTTP/2 et NoisyTCP</h1>
-<p class="hero-subtitle">Especificação técnica corporativa de mitigação contra Rapid Reset (CVE-2023-44487), controle de saturação NoisyTCP, diretivas de kernel Linux (sysctl), configuração de NGINX e ferramental CLI determinístico.</p>
+<p class="hero-subtitle">Spécification technique d'entreprise pour l'atténuation de Rapid Reset (CVE-2023-44487), contrôle de saturation NoisyTCP, directives du noyau Linux (sysctl), configuration NGINX et suite CLI déterministe.</p>
 </section>
 <div class="cli-card">
 <div class="cli-header">
 <span class="cli-title">Tests en terminal Local CLI</span>
-<button aria-label="Copiar comando" class="btn-copy-cli" id="btn-copy-cli" onclick="copyCliCommand()" type="button">
+<button aria-label="Copier la commande" class="btn-copy-cli" id="btn-copy-cli" onclick="copyCliCommand()" type="button">
 <span class="btn-copy-cli-text">Copier</span>
 <span aria-hidden="true" class="btn-copy-cli-icon"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg></span>
 </button>
 </div>
 <div class="cli-body">
-<p class="cli-desc">Para auditar os parâmetros de rede do kernel Linux (/proc/sys/net/ipv4) e o comportamento da pilha HTTP/2 diretamente no servidor, execute o script oficial em Python:</p>
+<p class="cli-desc">Pour auditer les paramètres réseau du noyau Linux (/proc/sys/net/ipv4) et le comportement de la pile HTTP/2 directement sur le serveur, exécutez le script officiel en Python :</p>
 <div class="cli-code-terminal" id="cli-terminal-code"><span class="cli-comment"># 1. Télécharger le script d'audit depuis le dépôt officiel</span>
 curl -sO https://raw.githubusercontent.com/TAVARDT-France/http2-kernel-dos-resilience-checker-fr/main/http2_kernel_dos_checker.py
 
-<span class="cli-comment"># 2. Executar auditoria determinística de parâmetros de rede no servidor</span>
+<span class="cli-comment"># 2. Exécuter l'audit déterministe des paramètres réseau sur le serveur</span>
 python http2_kernel_dos_checker.py</div>
 <div class="cli-features">
-<div class="cli-feature-tag"><strong>Inspeção Determinística</strong>Leitura direta de /proc/sys e RFCs</div>
-<div class="cli-feature-tag"><strong>Proteção Zero Trust</strong>Sem telemetria ou tráfego externo</div>
-<div class="cli-feature-tag"><strong>Zero Simulação</strong>Diretivas testadas em produção</div>
+<div class="cli-feature-tag"><strong>Inspection Déterministe</strong>Lecture directe de /proc/sys et RFC</div>
+<div class="cli-feature-tag"><strong>Protection Zero Trust</strong>Sans télémétrie ni trafic externe</div>
+<div class="cli-feature-tag"><strong>Zéro Simulation</strong>Directives testées en production</div>
 </div>
 </div>
 </div>
 <section class="matrix-section">
 <h2 class="section-title">Diagnostic Architectural : Serveur Standard vs. Infrastructure Blindée</h2>
-<p class="section-subtitle">Selecione uma das posturas arquiteturais para inspecionar os vetores de exaustão de recursos ou os controles de mitigação:</p>
+<p class="section-subtitle">Sélectionnez l'une des postures architecturales pour inspecter les vecteurs d'épuisement des ressources ou les contrôles d'atténuation :</p>
 <div class="matrix-tabs">
-<button class="matrix-tab-btn active vuln" id="tab-scenario-vuln" onclick="switchScenario('vuln')" type="button">1. Servidor Padrão (Vulnerável)</button>
-<button class="matrix-tab-btn hard" id="tab-scenario-hard" onclick="switchScenario('hard')" type="button">2. Servidor Blindado (Padrão TAVARDT Zero Trust)</button>
+<button class="matrix-tab-btn active vuln" id="tab-scenario-vuln" onclick="switchScenario('vuln')" type="button">1. Serveur Standard (Vulnérable)</button>
+<button class="matrix-tab-btn hard" id="tab-scenario-hard" onclick="switchScenario('hard')" type="button">2. Serveur Blindé (Standard TAVARDT Zero Trust)</button>
 </div>
 <div class="posture-display-card">
 <div class="posture-status-row">
-<span class="posture-badge badge-vuln" id="posture-badge">POSTURA PADRÃO: VULNERÁVEL A RCE &amp; ROUBO DE SEGREDO CORPORATIVO</span>
-<span class="posture-mode-tag" id="posture-mode-tag">Configuração Insegura Com Permissões Globais Excessivas</span>
+<span class="posture-badge badge-vuln" id="posture-badge">POSTURE STANDARD : VULNÉRABLE À L'ÉPUISEMENT DE RESSOURCES ET DOS HTTP/2</span>
+<span class="posture-mode-tag" id="posture-mode-tag">Paramètres Standard Sans Quota de Flux et TCP Non Protégé</span>
 </div>
-<p class="posture-summary" id="posture-summary">Pipelines convencionais frequentemente utilizam permissões globais irrestritas (write-all), disparam jobs privilegiados através de pull_request_target com checkout de código externo e consomem actions de terceiros sem fixação estrita por commit SHA, viabilizando ataques diretos de Supply Chain.</p>
+<p class="posture-summary" id="posture-summary">Les serveurs avec des configurations standard de noyau et des serveurs web exposés acceptent des centaines de flux simultanés sans limitation de débit RST_STREAM, des files d'attente de backlog courtes et sans protection SYN cookies, succombant rapidement aux attaques de Rapid Reset et NoisyTCP.</p>
 <div class="routes-box">
 <div class="routes-header">
-<span>Mapeamento de Vetores de Exaustão HTTP/2 &amp; TCP</span>
+<span>Cartographie des Vecteurs d'Épuisement HTTP/2 &amp; TCP</span>
 </div>
 <table class="routes-table">
 <thead>
 <tr>
 <th>VECTEUR / SURFACE D'ATTAQUE</th>
 <th>CONFIGURATION OBSERVÉE</th>
-<th>COMPORTAMENTO DO PIPELINE</th>
-<th>POSTURA DE SEGURANÇA</th>
+<th>COMPORTEMENT DU SERVEUR</th>
+<th>POSTURE DE SÉCURITÉ</th>
 </tr>
 </thead>
 <tbody id="routes-tbody">
@@ -1084,15 +1084,15 @@ python http2_kernel_dos_checker.py</div>
 </div>
 <div class="findings-header">
 <span>Directives et Contrôles Architecturaux</span>
-<span id="findings-count" style="color: #ef4444;">4 Vulnerabilidades Ativas</span>
+<span id="findings-count" style="color: #ef4444;">4 Vulnérabilités Actives</span>
 </div>
 <div class="findings-list" id="findings-list">
 </div>
 </div>
 </section>
 <section class="blueprints-section">
-<h2 class="section-title">Blueprints de Mitigação &amp; Configurações de Servidor</h2>
-<p class="section-subtitle">Selecione o arquivo de configuração para visualizar e copiar manifestos blindados prontos para aplicação imediata:</p>
+<h2 class="section-title">Blueprints d'Atténuation &amp; Configurations Serveur</h2>
+<p class="section-subtitle">Sélectionnez le fichier de configuration pour visualiser et copier des manifestes blindés prêts pour une application immédiate :</p>
 <div class="code-toolbar">
 <select class="code-select" id="code-select" onchange="switchCodeTab(this.value)">
 <option value="sysctl">sysctl-hardening.conf (Noyau Linux)</option>
@@ -1101,21 +1101,21 @@ python http2_kernel_dos_checker.py</div>
 <option value="docker">docker-compose-hardened.yml (Containers)</option>
 <option value="cli">http2_kernel_dos_checker.py (CLI)</option>
 </select>
-<button class="btn-copy" id="btn-copy-code" onclick="copyCode()" type="button">Copiar</button>
+<button class="btn-copy" id="btn-copy-code" onclick="copyCode()" type="button">Copier</button>
 </div>
 <pre class="code-viewer-box" id="code-box"></pre>
 </section>
 <section class="aeo-section">
-<span class="aeo-overline">PADRÃO DE SEGURANÇA DEFENSIVA PARA INFRAESTRUTURA HTTP/2</span>
-<h2 class="aeo-title">Como Proteger Servidores Corporativos contra Ataques DoS em HTTP/2 e Camada de Rede?</h2>
+<span class="aeo-overline">STANDARD DE SÉCURITÉ DÉFENSIVE POUR L'INFRASTRUCTURE HTTP/2</span>
+<h2 class="aeo-title">Comment Protéger les Serveurs d'Entreprise contre les Attaques DoS en HTTP/2 et Couche Réseau ?</h2>
 <div class="aeo-content">
-<p>O protocolo HTTP/2 introduziu a multiplexação de fluxos bidirecionais sobre uma única conexão TCP, permitindo alto ganho de desempenho para aplicações modernas. No entanto, falhas estruturais como o ataque Rapid Reset (CVE-2023-44487) e a exaustão por NoisyTCP exploram essa multiplexação ao abrir milhares de streams simultâneos e cancelá-los instantaneamente com quadros RST_STREAM, saturando o processamento de proxies e servidores web.</p>
-<p>A defesa em profundidade recomendada pela TAVARDT combina mitigação na camada de aplicação L7 (impondo cotas rigorosas de streams concorrentes e limites de reset no NGINX ou proxy reverso), ajuste fino dos buffers TCP e filas de backlog no kernel Linux (/etc/sysctl.d) e descarte preemptivo de rajadas de pacotes anômalos na camada L4 com regras de firewall nftables.</p>
+<p>Le protocole HTTP/2 a introduit le multiplexage de flux bidirectionnels sur une seule connexion TCP, permettant un gain de performance significatif pour les applications modernes. Cependant, des failles structurelles telles que l'attaque Rapid Reset (CVE-2023-44487) et l'épuisement par NoisyTCP exploitent ce multiplexage en ouvrant des milliers de flux simultanés et en les annulant instantanément avec des trames RST_STREAM, saturant le traitement des proxys et des serveurs web.</p>
+<p>La défense en profondeur recommandée par TAVARDT combine l'atténuation au niveau applicatif L7 (en imposant des quotas stricts de flux simultanés et des limites de reset dans NGINX ou le proxy inverse), l'ajustement fin des tampons TCP et des files de backlog dans le noyau Linux (/etc/sysctl.d) et le rejet préventif des rafales de paquets anormaux au niveau L4 avec des règles de pare-feu nftables.</p>
 </div>
 </section>
 <section class="faq-section">
-<h2 class="faq-title">Perguntas Frequentes sobre Mitigação de DoS em HTTP/2 e Kernel Linux</h2>
-<div class="faq-list"><div class="faq-item"><div class="faq-question">Por que auditorias ativas de sobrecarga HTTP/2 e queda de kernel não devem ser executadas pelo navegador?<span class="faq-toggle">+</span></div><div class="faq-answer">Auditorias de exaustão de pilha TCP e kernel exigem sockets brutos (raw sockets) e inspeção do sistema de arquivos /proc/sys do host, capacidades indisponíveis na sandbox restrita do navegador web. Por isso, a TAVARDT disponibiliza blueprints validados de configuração e um script CLI determinístico em Python para execução local no servidor.</div></div><div class="faq-item"><div class="faq-question">Como o ataque HTTP/2 Rapid Reset (CVE-2023-44487) atua sobre servidores web?<span class="faq-toggle">+</span></div><div class="faq-answer">O ataque explora o mecanismo de multiplexação do protocolo HTTP/2 enviando sucessivas requisições HEADERS imediatamente seguidas de quadros RST_STREAM. O servidor web aloca recursos para processar cada requisição antes de descartá-la, gerando sobrecarga massiva de CPU e memória sem que o limite de conexões concorrentes seja atingido.</div></div><div class="faq-item"><div class="faq-question">Quais parâmetros do kernel Linux (sysctl) são fundamentais para mitigação de saturação TCP?<span class="faq-toggle">+</span></div><div class="faq-answer">Destacam-se net.ipv4.tcp_syncookies = 1 (proteção contra SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (fila de conexões pendentes), net.ipv4.tcp_fin_timeout = 15 (liberação rápida de sockets órfãos) e net.ipv4.tcp_tw_reuse = 1 (reaproveitamento seguro de sockets em TIME_WAIT).</div></div><div class="faq-item"><div class="faq-question">Qual a diferença entre mitigar ataques DoS na camada de aplicação (L7) versus camada de rede (L4)?<span class="faq-toggle">+</span></div><div class="faq-answer">A camada L4 (firewall nftables) filtra pacotes SYN abusivos e conexões anômalas antes que cheguem ao espaço do usuário, consumindo mínima CPU. A camada L7 (NGINX/proxy) inspeciona fluxos HTTP/2, limitando requisições e RST_STREAMs. Uma arquitetura defensiva robusta exige a atuação coordenada de ambas as camadas.</div></div><div class="faq-item"><div class="faq-question">Como implementar as diretivas de mitigação sem interromper o tráfego legítimo de usuários?<span class="faq-toggle">+</span></div><div class="faq-answer">Recomenda-se aplicar os parâmetros em ambiente de staging ou através de deploy canário, monitorando métricas de latência e contadores de descarte com nstat e dmesg. As diretivas NGINX devem manter margem suficiente (ex.: 64 a 128 streams concorrentes) para atender clientes legítimos com alta performance.</div></div></div>
+<h2 class="faq-title">Foire Aux Questions sur l'Atténuation DoS en HTTP/2 et Noyau Linux</h2>
+<div class="faq-list"><div class="faq-item"><div class="faq-question">Pourquoi les audits actifs de surcharge HTTP/2 et de crash du noyau ne doivent-ils pas être exécutés via le navigateur ?<span class="faq-toggle">+</span></div><div class="faq-answer">Les audits d'épuisement de pile TCP et de noyau nécessitent des sockets bruts (raw sockets) et l'inspection du système de fichiers /proc/sys de l'hôte, capacités indisponibles dans le bac à sable restreint du navigateur web. C'est pourquoi TAVARDT met à disposition des blueprints de configuration validés et un script CLI déterministe en Python pour une exécution locale sur le serveur.</div></div><div class="faq-item"><div class="faq-question">Comment l'attaque HTTP/2 Rapid Reset (CVE-2023-44487) agit-elle sur les serveurs web ?<span class="faq-toggle">+</span></div><div class="faq-answer">L'attaque exploite le mécanisme de multiplexage du protocole HTTP/2 en envoyant des requêtes HEADERS successives immédiatement suivies de trames RST_STREAM. Le serveur web alloue des ressources pour traiter chaque requête avant de l'abandonner, générant une surcharge massive de CPU et de mémoire sans jamais atteindre la limite de connexions simultanées.</div></div><div class="faq-item"><div class="faq-question">Quels paramètres du noyau Linux (sysctl) sont fondamentaux pour atténuer la saturation TCP ?<span class="faq-toggle">+</span></div><div class="faq-answer">On distingue notamment net.ipv4.tcp_syncookies = 1 (protection contre le SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (file d'attente des connexions en attente), net.ipv4.tcp_fin_timeout = 15 (libération rapide des sockets orphelins) et net.ipv4.tcp_tw_reuse = 1 (réutilisation sécurisée des sockets en TIME_WAIT).</div></div><div class="faq-item"><div class="faq-question">Quelle est la différence entre atténuer les attaques DoS au niveau applicatif (L7) et au niveau réseau (L4) ?<span class="faq-toggle">+</span></div><div class="faq-answer">La couche L4 (pare-feu nftables) filtre les paquets SYN abusifs et les connexions anormales avant qu'ils n'atteignent l'espace utilisateur, consommant un minimum de CPU. La couche L7 (NGINX/proxy) inspecte les flux HTTP/2, limitant requêtes et RST_STREAM. Une architecture défensive robuste exige l'action coordonnée de ces deux couches.</div></div><div class="faq-item"><div class="faq-question">Comment implémenter les directives d'atténuation sans interrompre le trafic légitime des utilisateurs ?<span class="faq-toggle">+</span></div><div class="faq-answer">Il est recommandé d'appliquer les paramètres en environnement de préproduction ou via un déploiement canari, en surveillant les métriques de latence et les compteurs d'abandon avec nstat et dmesg. Les directives NGINX doivent conserver une marge suffisante (ex. 64 à 128 flux simultanés) pour servir les clients légitimes avec des performances optimales.</div></div></div>
 </section>
 
 <div class="cta-card">
@@ -1132,7 +1132,7 @@ python http2_kernel_dos_checker.py</div>
 <div class="tavardt-footer-inner">
 <div class="tavardt-footer-col">
 <div class="tavardt-footer-logo">TAVARDT</div>
-<p class="tavardt-footer-mission">Transformamos negócios invisíveis em marcas reconhecidas e seguras no mercado digital.</p>
+<p class="tavardt-footer-mission">Nous transformons des entreprises invisibles en marques reconnues et sécurisées sur le marché numérique.</p>
 </div>
 <div class="tavardt-footer-col">
 <div class="tavardt-footer-heading">Navigation Régionale</div>
@@ -1144,11 +1144,11 @@ python http2_kernel_dos_checker.py</div>
 </div>
 <div class="tavardt-footer-col">
 <div class="tavardt-footer-heading">Gouvernance &amp; Conformité</div>
-<p class="tavardt-footer-compliance-text">Arquitetura defensiva e controles de cibersegurança em conformidade com as diretrizes CIS Benchmarks, OWASP Top 10 e padrões Zero Trust.</p>
+<p class="tavardt-footer-compliance-text">Architecture défensive et contrôles de cybersécurité conformes aux directives CIS Benchmarks, OWASP Top 10 et standards Zero Trust.</p>
 </div>
 </div>
 <div class="tavardt-footer-bottom">
-<p>© 2026 TAVARDT. Todos os direitos reservados.</p>
+<p>© 2026 TAVARDT. Tous droits réservés.</p>
 </div>
 </footer>
 <script>
@@ -1156,34 +1156,34 @@ python http2_kernel_dos_checker.py</div>
     let activeTab = 'sysctl';
 
     const codeTemplates = {
-      sysctl: `# sysctl-hardening.conf - TAVARDT Hardening de Kernel Linux contra DoS HTTP/2 e NoisyTCP
-# Aplicar com: sysctl -p /etc/sysctl.d/99-tavardt-http2-hardening.conf
+      sysctl: `# sysctl-hardening.conf - TAVARDT Durcissement du Noyau Linux contre DoS HTTP/2 et NoisyTCP
+# Appliquer avec : sysctl -p /etc/sysctl.d/99-tavardt-http2-hardening.conf
 
-# 1. Protecao contra SYN Flood e exaustao de conexoes TCP
+# 1. Protection contre SYN Flood et epuisement des connexions TCP
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_max_syn_backlog = 8192
 net.ipv4.tcp_synack_retries = 2
 
-# 2. Descarte acelerado de conexoes orfas e encerramento rapido
+# 2. Rejet accelere des connexions orphelines et fermeture rapide
 net.ipv4.tcp_fin_timeout = 15
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_max_tw_buckets = 1440000
 
-# 3. Quota de memoria e buffers TCP para absorver multiplexacao HTTP/2
+# 3. Quota de memoire et tampons TCP pour absorber le multiplexage HTTP/2
 net.core.somaxconn = 8192
 net.core.netdev_max_backlog = 16384
 net.ipv4.tcp_rmem = 4096 87380 67108864
 net.ipv4.tcp_wmem = 4096 65536 67108864
 
-# 4. Mitigacao de exaustao de tabela de estado (nf_conntrack)
+# 4. Attenuation de l'epuisement de la table d'etat (nf_conntrack)
 net.netfilter.nf_conntrack_max = 524288
 net.netfilter.nf_conntrack_tcp_timeout_established = 600
 net.netfilter.nf_conntrack_tcp_timeout_close_wait = 10`,
 
-      nginx: `# nginx-http2-hardened.conf - TAVARDT Mitigacao HTTP/2 Rapid Reset (CVE-2023-44487)
-# Inclusao no bloco http {} e server {} do NGINX corporativo
+      nginx: `# nginx-http2-hardened.conf - TAVARDT Attenuation HTTP/2 Rapid Reset (CVE-2023-44487)
+# Inclusion dans le bloc http {} et server {} de NGINX d'entreprise
 
-# 1. Zonas de Rate Limiting para controle de requisicoes por IP
+# 1. Zones de limitation de debit pour controle des requetes par IP
 limit_req_zone $binary_remote_addr zone=http2_limit:20m rate=40r/s;
 limit_conn_zone $binary_remote_addr zone=conn_limit:20m;
 
@@ -1191,20 +1191,20 @@ server {
     listen 443 ssl http2;
     server_name example.com;
 
-    # 2. Quotas estritas de multiplexacao HTTP/2 para conter Rapid Reset
+    # 2. Quotas stricts de multiplexage HTTP/2 pour endiguer Rapid Reset
     http2_max_concurrent_streams 64;
     http2_max_field_size 8k;
     http2_max_header_size 32k;
     http2_max_requests 1000;
     http2_recv_buffer_size 256k;
 
-    # 3. Timeouts curtos para evitar travamento de workers
+    # 3. Delais d'attente courts pour eviter le blocage des workers
     client_body_timeout 10s;
     client_header_timeout 10s;
     keepalive_timeout 30s 30s;
     send_timeout 10s;
 
-    # 4. Aplicacao de limites de conexao e requisicoes
+    # 4. Application des limites de connexion et requetes
     limit_conn conn_limit 20;
     limit_req zone=http2_limit burst=20 nodelay;
 
@@ -1215,8 +1215,8 @@ server {
     }
 }`,
 
-      nftables: `# nftables-dos-protection.conf - TAVARDT Filtragem L4 de Pacotes e Mitigacao DoS
-# Aplicar com: nft -f /etc/nftables/tavardt-dos-filter.nft
+      nftables: `# nftables-dos-protection.conf - TAVARDT Filtrage L4 de Paquets et Attenuation DoS
+# Appliquer avec : nft -f /etc/nftables/tavardt-dos-filter.nft
 
 table inet tavardt_filter {
     set denylist {
@@ -1227,10 +1227,10 @@ table inet tavardt_filter {
     chain prerouting {
         type filter hook prerouting priority -300; policy accept;
 
-        # Bloquear IPs na lista de descarte temporario
+        # Bloquer les IP de la liste de rejet temporaire
         ip saddr @denylist drop
 
-        # Mitigacao de inundacao de pacotes TCP RST e SYN anormais
+        # Attenuation de l'inondation de paquets TCP RST et SYN anormaux
         tcp flags & (rst|ack) == rst limit rate over 50/second add @denylist { ip saddr timeout 10m } drop
         tcp flags syn tcp flags & (fin|syn|rst|ack) == syn limit rate over 100/second burst 150 packets accept
     }
@@ -1238,18 +1238,18 @@ table inet tavardt_filter {
     chain input {
         type filter hook input priority 0; policy drop;
 
-        # Aceitar trafego de loopback e conexoes estabelecidas
+        # Accepter le trafic de loopback et les connexions etablies
         iif "lo" accept
         ct state established,related accept
         ct state invalid drop
 
-        # Protecao de porta HTTPS (443) com limite de novas conexoes por IP
+        # Protection du port HTTPS (443) avec limite de nouvelles connexions par IP
         tcp dport 443 meter flood { ip saddr ct count over 40 } drop
         tcp dport 443 accept
     }
 }`,
 
-      docker: `# docker-compose-hardened.yml - Reverse Proxy HTTP/2 Blindado com Limites de Recursos
+      docker: `# docker-compose-hardened.yml - Reverse Proxy HTTP/2 Securise avec Limites de Ressources
 version: '3.8'
 
 services:
@@ -1279,13 +1279,13 @@ services:
     cap_add:
       - NET_BIND_SERVICE`,
 
-      cli: `# http2_kernel_dos_checker.py - TAVARDT Utilitario CLI Deterministico de Auditoria Local
+      cli: `# http2_kernel_dos_checker.py - TAVARDT Utilitaire CLI Deterministe d'Audit Local
 import os
 import sys
 
 def check_sysctl_param(param_path, expected_min):
     if not os.path.exists(param_path):
-        return None, "Parametro nao encontrado no sistema atual"
+        return None, "Parametre non trouve dans le systeme actuel"
     try:
         with open(param_path, "r") as f:
             val = int(f.read().strip())
@@ -1300,10 +1300,10 @@ def run_audit():
     print("=" * 60)
     
     checks = [
-        ("/proc/sys/net/ipv4/tcp_syncookies", 1, "Protecao SYN Flood"),
-        ("/proc/sys/net/ipv4/tcp_max_syn_backlog", 4096, "Fila de Conexoes SYN"),
-        ("/proc/sys/net/ipv4/tcp_tw_reuse", 1, "Reaproveitamento TIME_WAIT"),
-        ("/proc/sys/net/core/somaxconn", 4096, "Limite de Conexoes em Socket")
+        ("/proc/sys/net/ipv4/tcp_syncookies", 1, "Protection SYN Flood"),
+        ("/proc/sys/net/ipv4/tcp_max_syn_backlog", 4096, "File d'Attente de Connexions SYN"),
+        ("/proc/sys/net/ipv4/tcp_tw_reuse", 1, "Reutilisation TIME_WAIT"),
+        ("/proc/sys/net/core/somaxconn", 4096, "Limite de Connexions sur Socket")
     ]
     
     score = 0
@@ -1319,7 +1319,7 @@ def run_audit():
             
     print("." * 60)
     pct = int((score / total) * 100)
-    print(f"Indice de Hardening de Kernel: {pct}% ({score}/{total} verificacoes aprovadas)")
+    print(f"Indice de Durcissement du Noyau : {pct}% ({score}/{total} verifications approuvees)")
     print("=" * 60)
 
 if __name__ == "__main__":
@@ -1405,7 +1405,7 @@ if __name__ == "__main__":
       data.findings.forEach(f => {
         const item = document.createElement('div');
         item.className = 'finding-item ' + f.type;
-        item.innerText = (f.type === 'ok' ? '[CONFORME] ' : '[ALERTA CRÍTICO] ') + f.text;
+        item.innerText = (f.type === 'ok' ? '[CONFORME] ' : '[ALERTE CRITIQUE] ') + f.text;
         fList.appendChild(item);
       });
     }
