@@ -1115,7 +1115,53 @@ python http2_kernel_dos_checker.py</div>
 </section>
 <section class="faq-section">
 <h2 class="faq-title">Foire Aux Questions sur l'Atténuation DoS en HTTP/2 et Noyau Linux</h2>
-<div class="faq-list"><div class="faq-item"><div class="faq-question">Pourquoi les audits actifs de surcharge HTTP/2 et de crash du noyau ne doivent-ils pas être exécutés via le navigateur ?<span class="faq-toggle">+</span></div><div class="faq-answer">Les audits d'épuisement de pile TCP et de noyau nécessitent des sockets bruts (raw sockets) et l'inspection du système de fichiers /proc/sys de l'hôte, capacités indisponibles dans le bac à sable restreint du navigateur web. C'est pourquoi TAVARDT met à disposition des blueprints de configuration validés et un script CLI déterministe en Python pour une exécution locale sur le serveur.</div></div><div class="faq-item"><div class="faq-question">Comment l'attaque HTTP/2 Rapid Reset (CVE-2023-44487) agit-elle sur les serveurs web ?<span class="faq-toggle">+</span></div><div class="faq-answer">L'attaque exploite le mécanisme de multiplexage du protocole HTTP/2 en envoyant des requêtes HEADERS successives immédiatement suivies de trames RST_STREAM. Le serveur web alloue des ressources pour traiter chaque requête avant de l'abandonner, générant une surcharge massive de CPU et de mémoire sans jamais atteindre la limite de connexions simultanées.</div></div><div class="faq-item"><div class="faq-question">Quels paramètres du noyau Linux (sysctl) sont fondamentaux pour atténuer la saturation TCP ?<span class="faq-toggle">+</span></div><div class="faq-answer">On distingue notamment net.ipv4.tcp_syncookies = 1 (protection contre le SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (file d'attente des connexions en attente), net.ipv4.tcp_fin_timeout = 15 (libération rapide des sockets orphelins) et net.ipv4.tcp_tw_reuse = 1 (réutilisation sécurisée des sockets en TIME_WAIT).</div></div><div class="faq-item"><div class="faq-question">Quelle est la différence entre atténuer les attaques DoS au niveau applicatif (L7) et au niveau réseau (L4) ?<span class="faq-toggle">+</span></div><div class="faq-answer">La couche L4 (pare-feu nftables) filtre les paquets SYN abusifs et les connexions anormales avant qu'ils n'atteignent l'espace utilisateur, consommant un minimum de CPU. La couche L7 (NGINX/proxy) inspecte les flux HTTP/2, limitant requêtes et RST_STREAM. Une architecture défensive robuste exige l'action coordonnée de ces deux couches.</div></div><div class="faq-item"><div class="faq-question">Comment implémenter les directives d'atténuation sans interrompre le trafic légitime des utilisateurs ?<span class="faq-toggle">+</span></div><div class="faq-answer">Il est recommandé d'appliquer les paramètres en environnement de préproduction ou via un déploiement canari, en surveillant les métriques de latence et les compteurs d'abandon avec nstat et dmesg. Les directives NGINX doivent conserver une marge suffisante (ex. 64 à 128 flux simultanés) pour servir les clients légitimes avec des performances optimales.</div></div></div>
+<div class="faq-list">
+  <div class="faq-item">
+    <button class="faq-btn" onclick="toggleFaq(this)" type="button">
+      <span>Pourquoi les audits actifs de surcharge HTTP/2 et de crash du noyau ne doivent-ils pas être exécutés via le navigateur ?</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-body">
+      Les audits d'épuisement de pile TCP et de noyau nécessitent des sockets bruts (raw sockets) et l'inspection du système de fichiers /proc/sys de l'hôte, capacités indisponibles dans le bac à sable restreint du navigateur web. C'est pourquoi TAVARDT met à disposition des blueprints de configuration validés et un script CLI déterministe en Python pour une exécution locale sur le serveur.
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-btn" onclick="toggleFaq(this)" type="button">
+      <span>Comment l'attaque HTTP/2 Rapid Reset (CVE-2023-44487) agit-elle sur les serveurs web ?</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-body">
+      L'attaque exploite le mécanisme de multiplexage du protocole HTTP/2 en envoyant des requêtes HEADERS successives immédiatement suivies de trames RST_STREAM. Le serveur web alloue des ressources pour traiter chaque requête avant de l'abandonner, générant une surcharge massive de CPU et de mémoire sans jamais atteindre la limite de connexions simultanées.
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-btn" onclick="toggleFaq(this)" type="button">
+      <span>Quels paramètres du noyau Linux (sysctl) sont fondamentaux pour atténuer la saturation TCP ?</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-body">
+      On distingue notamment net.ipv4.tcp_syncookies = 1 (protection contre le SYN flood), net.ipv4.tcp_max_syn_backlog = 8192 (file d'attente des connexions en attente), net.ipv4.tcp_fin_timeout = 15 (libération rapide des sockets orphelins) et net.ipv4.tcp_tw_reuse = 1 (réutilisation sécurisée des sockets en TIME_WAIT).
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-btn" onclick="toggleFaq(this)" type="button">
+      <span>Quelle est la différence entre atténuer les attaques DoS au niveau applicatif (L7) et au niveau réseau (L4) ?</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-body">
+      La couche L4 (pare-feu nftables) filtre les paquets SYN abusifs et les connexions anormales avant qu'ils n'atteignent l'espace utilisateur, consommant un minimum de CPU. La couche L7 (NGINX/proxy) inspecte les flux HTTP/2, limitant requêtes et RST_STREAM. Une architecture défensive robuste exige l'action coordonnée de ces deux couches.
+    </div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-btn" onclick="toggleFaq(this)" type="button">
+      <span>Comment implémenter les directives d'atténuation sans interrompre le trafic légitime des utilisateurs ?</span>
+      <span class="faq-icon">+</span>
+    </button>
+    <div class="faq-body">
+      Il est recommandé d'appliquer les paramètres en environnement de préproduction ou via un déploiement canari, en surveillant les métriques de latence et les compteurs d'abandon avec nstat et dmesg. Les directives NGINX doivent conserver une marge suffisante (ex. 64 à 128 flux simultanés) pour servir les clients légitimes avec des performances optimales.
+    </div>
+  </div>
+</div>
 </section>
 
 <div class="cta-card">
